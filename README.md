@@ -1,4 +1,4 @@
 androidApp
 ==========
 
-eclipse用のgitリポジトリ
+Androidアプリ用リポジトリ
