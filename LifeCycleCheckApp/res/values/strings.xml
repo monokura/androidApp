@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">LifeCycleCheckApp</string>
+    <string name="action_settings">Settings</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="button1">ダイアログ</string>
+    <string name="main_title">LifeCycle Check</string>
+    <string name="button2">アクティビティ</string>
+    <string name="title_activity_dialog">Dialog</string>
+
+</resources>
