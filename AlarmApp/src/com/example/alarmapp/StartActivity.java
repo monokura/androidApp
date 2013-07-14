@@ -126,8 +126,9 @@ public class StartActivity extends Activity implements OnClickListener,SharedPre
 	
     private PendingIntent getPendingIntent() {
         // 起動するアプリケーションを登録 
-       Intent intent = new Intent( getApplicationContext(), AlarmActivity.class );
-       PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT );
+    	//Intent intent = new Intent( getApplicationContext(), AlarmActivity.class );
+        Intent intent = new Intent( getApplicationContext(), ShakeAlarmActivity.class );
+    	PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT );
        return pendingIntent;
     }
 	
