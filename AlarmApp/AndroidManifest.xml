@@ -30,6 +30,10 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="StartActivity" />
         </activity>
+        <activity
+            android:name="com.example.alarmapp.ShakeAlarmActivity"
+            android:label="@string/title_activity_shake_alarm" >
+        </activity>
     </application>
 
 </manifest>
