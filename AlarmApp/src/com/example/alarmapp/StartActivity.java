@@ -15,7 +15,11 @@ import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
+import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 public class StartActivity extends Activity implements OnClickListener,SharedPreferences.OnSharedPreferenceChangeListener{
 	private AlarmManager alarmManager;
@@ -24,6 +28,8 @@ public class StartActivity extends Activity implements OnClickListener,SharedPre
 	
 	private int cal_hour;
 	private int cal_minute;
+	private int selectAlarm;
+	private int selectSound;
 	
     private SharedPreferences prefs;
 	
@@ -32,106 +38,191 @@ public class StartActivity extends Activity implements OnClickListener,SharedPre
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_start);
 		
+		// ボタン設定
+		Button alarmYesButton = (Button)findViewById(R.id.buttonYes);
+		Button alarmNoButton = (Button)findViewById(R.id.buttonNo);
+		alarmYesButton.setOnClickListener(this);
+		alarmNoButton.setOnClickListener(this);
+		
+		// 画面設定
+		settingDisplayParts();
+	}
+	
+	private void settingDisplayParts(){
+		TextView nowSet = (TextView)findViewById(R.id.text_set_time);
+		Button alarmYesButton = (Button)findViewById(R.id.buttonYes);
+		Button alarmNoButton = (Button)findViewById(R.id.buttonNo);
+
 		// 現在時間の取得
 		calendar = Calendar.getInstance();
 		calendar.setTimeInMillis(System.currentTimeMillis());
 		cal_hour = calendar.get(Calendar.HOUR);
 		cal_minute = calendar.get(Calendar.MINUTE);
 		
-		// ボタン設定
-		Button alarmYesButton = (Button)findViewById(R.id.buttonYes);
-		Button alarmNoButton = (Button)findViewById(R.id.buttonNo);
-		
-		alarmYesButton.setOnClickListener(this);
-		alarmNoButton.setOnClickListener(this);
-		
 		// 保存された時刻を取得 
         prefs = PreferenceManager.getDefaultSharedPreferences(this);
         prefs.registerOnSharedPreferenceChangeListener(this);
-        getSharedPreferences();
+        cal_hour = prefs.getInt("cal_hour", cal_hour);
+        cal_minute = prefs.getInt("cal_minute", cal_minute);        
+		
+		// TimePicker に反映 
+		timePicker = (TimePicker)findViewById(R.id.time_picker);
+		timePicker.setIs24HourView(false);
+		timePicker.setCurrentHour(cal_hour);
+		timePicker.setCurrentMinute(cal_minute);
+		
+		// RadioButtonの設定
+		selectSound = prefs.getInt("checked_sound", -1);
+        selectAlarm = prefs.getInt("checked_mode", -1);
+        if(selectSound != -1){
+        	RadioButton rb = (RadioButton)findViewById(selectSound);
+        	rb.setChecked(true);
+        }
+        if(selectAlarm != -1){
+        	RadioButton rb = (RadioButton)findViewById(selectAlarm);
+        	rb.setChecked(true);
+        }
         
-        // TimePicker に反映 
-       timePicker = (TimePicker)findViewById(R.id.time_picker);
-       timePicker.setIs24HourView(true);
-       timePicker.setCurrentHour(cal_hour);
-       timePicker.setCurrentMinute(cal_minute);
+		if(prefs.getBoolean("alarm_on", false)){
+			// 設定時刻あり
+			nowSet.setText(getMessageTime());
+			alarmYesButton.setText("上書き");
+			alarmNoButton.setEnabled(true);
+		}else{
+			// 設定時刻なし
+			nowSet.setText("登録されていません");
+			alarmYesButton.setText("登録");
+			alarmNoButton.setEnabled(false);
+		}
 	}
 	
-    private void getSharedPreferences() {
-        // 保存されていた時刻を取得 
-       cal_hour = prefs.getInt("cal_hour", cal_hour);
-       cal_minute = prefs.getInt("cal_minute", cal_minute);
-    }
+	private String getMessageTime(){
+		return 
+			String.valueOf(cal_hour) + "時" +
+			String.valueOf(cal_minute) + "分";
+	}
 	
 	@Override
 	public void onClick(View v) {
-		// TODO Auto-generated method stub
-		Button alarmYesButton = (Button)findViewById(R.id.buttonYes);
-		Button alarmNoButton = (Button)findViewById(R.id.buttonNo);
-		
 		switch(v.getId()){
 		case R.id.buttonYes:
-			// ボタン設定
-			alarmYesButton.setEnabled(false);
-			alarmNoButton.setEnabled(true);
-			
-			startAlarm();
+			setAlarm();
+			// 画面設定
+			settingDisplayParts();
 			break;
 		case R.id.buttonNo:
-			// ボタン設定
-			alarmYesButton.setEnabled(true);
-			alarmNoButton.setEnabled(false);
-						
-			stopAlarm();
+			removeAlarm();
+			 // alarmをoff
+		    SharedPreferences.Editor editor = prefs.edit();
+		    editor.putBoolean("alarm_on", false);
+		    editor.commit();
+			// 画面設定
+			settingDisplayParts();
 			break;
 		}
 	}
 	
-	public void startAlarm(){
-		Log.d("AlarmApp","startAlarm");
-		
-		alarmManager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
-		
+	public void setAlarm(){
+		Log.d("AlarmApp","setAlarm");
+
+		// 現在時刻を取得しカレンダーに保存
 		calendar = Calendar.getInstance();
 		calendar.setTimeInMillis(System.currentTimeMillis());
+		// TimePicker で選択された時刻を取得 
+		timePicker = (TimePicker)findViewById(R.id.time_picker);
+		cal_hour = timePicker.getCurrentHour();
+		cal_minute = timePicker.getCurrentMinute();
 		
-        // TimePicker で選択された時刻を取得 
-        timePicker = (TimePicker)findViewById(R.id.time_picker);
-        cal_hour = timePicker.getCurrentHour();
-        cal_minute = timePicker.getCurrentMinute();
-        
-        // 取得した時刻をカレンダーに設定 
-       calendar.set(Calendar.HOUR_OF_DAY, cal_hour);
-       calendar.set(Calendar.MINUTE, cal_minute );
-       calendar.set(Calendar.SECOND, 0);
-       calendar.set(Calendar.MILLISECOND, 0);
-       
-       // アラームに登録 
-       alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), getPendingIntent());
-       
-        // 時刻を保存 
-       SharedPreferences.Editor editor = prefs.edit();
-       editor.putInt( "cal_hour", cal_hour );
-       editor.putInt( "cal_minute", cal_minute );
-       editor.commit();
+		// 設定時間が過去ならば24時間分足す
+		long millis24hour = 24*60*60*1000;
+		if(cal_hour > calendar.get(Calendar.HOUR_OF_DAY)){
+	    	// 設定の「時」が未来
+	    	millis24hour = 0;
+	    }else if((cal_hour == calendar.get(Calendar.HOUR_OF_DAY))
+	    		&& (cal_minute >= calendar.get(Calendar.MINUTE))){
+	    	// 設定の「時」が同じで、「分」が未来
+	    	millis24hour = 0;
+	    }else{
+	    	Toast.makeText(this, "3", Toast.LENGTH_SHORT).show();
+	    }
+		// 取得した時刻をカレンダーに設定 
+		calendar.set(Calendar.HOUR_OF_DAY, cal_hour);
+		calendar.set(Calendar.MINUTE, cal_minute );
+	    calendar.set(Calendar.SECOND, 0);
+	    calendar.set(Calendar.MILLISECOND, 0);
+	       
+		// RadioButtonで選択された音とモードを取得
+	    RadioGroup radioGroupSound = (RadioGroup)findViewById(R.id.radiogroup_sound);
+	    selectSound = radioGroupSound.getCheckedRadioButtonId();
+	    RadioGroup radioGroupMode = (RadioGroup)findViewById(R.id.radiogroup_mode);
+	    selectAlarm = radioGroupMode.getCheckedRadioButtonId();
+	    
+	    // 記録前に前のアラームを消去
+	    removeAlarm();
+	    
+	    // アラームに登録 
+		alarmManager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
+	    alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis() + millis24hour, getPendingIntent());
+	    
+	    // 時刻を保存 
+	    SharedPreferences.Editor editor = prefs.edit();
+	    editor.putInt( "cal_hour", cal_hour );
+	    editor.putInt( "cal_minute", cal_minute );
+	    editor.putInt( "checked_sound", selectSound);
+	    editor.putInt( "checked_mode", selectAlarm);
+	    editor.putBoolean("alarm_on", true);
+	    editor.commit();
 	}
 
-	public void stopAlarm(){
-       Log.d("AlarmTestActivity", "stopAlarm()");
+	public void removeAlarm(){
+       Log.d("AlarmTestActivity", "removeAlarm()");
         
         // 登録してあるアラームを解除 
        alarmManager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
-       alarmManager.cancel(getPendingIntent());
+       alarmManager.cancel(getPreviousPendingIntent());
 	}
 	
     private PendingIntent getPendingIntent() {
         // 起動するアプリケーションを登録 
-    	//Intent intent = new Intent( getApplicationContext(), AlarmActivity.class );
-        Intent intent = new Intent( getApplicationContext(), ShakeAlarmActivity.class );
+        // 現在選ばれているモード
+	    RadioGroup radioGroupMode = (RadioGroup)findViewById(R.id.radiogroup_mode);
+	    selectAlarm = radioGroupMode.getCheckedRadioButtonId();
+	    
+	    Intent intent = null;
+    	switch(selectAlarm){
+    	case R.id.radioButton_mode1:
+    		intent = new Intent( getApplicationContext(), AlarmActivity.class );
+    		break;
+    	case R.id.radioButton_mode2:
+    		intent = new Intent( getApplicationContext(), ShakeAlarmActivity.class );
+    		break;
+    	}
+    	RadioGroup radioGroupSound = (RadioGroup)findViewById(R.id.radiogroup_sound);
+	    selectSound = radioGroupSound.getCheckedRadioButtonId();
+	    intent.putExtra("sound", selectSound);
     	PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT );
        return pendingIntent;
     }
 	
+    private PendingIntent getPreviousPendingIntent() {
+        // 起動するアプリケーションを登録 
+        // 設定したモード
+    	selectAlarm = prefs.getInt("checked_mode", -1);
+	    Intent intent = null;
+    	switch(selectAlarm){
+    	case R.id.radioButton_mode1:
+    		intent = new Intent( getApplicationContext(), AlarmActivity.class );
+    		break;
+    	case R.id.radioButton_mode2:
+    		intent = new Intent( getApplicationContext(), ShakeAlarmActivity.class );
+    		break;
+    	}
+    	selectSound = prefs.getInt("checked_sound", -1);
+    	intent.putExtra("sound", selectSound);
+    	PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT );
+       return pendingIntent;
+    }
+    
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
@@ -140,7 +231,6 @@ public class StartActivity extends Activity implements OnClickListener,SharedPre
 	}
 	@Override
 	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,String key) {
-		// TODO Auto-generated method stub
-		getSharedPreferences();
+		settingDisplayParts();
 	}
 }

@@ -11,5 +11,7 @@
     <string name="alarm_button">アラーム停止</string>
     <string name="title_activity_shake_alarm">ShakeAlarmActivity</string>
     <string name="hure">振れ</string>
+    <string name="set_value">登録されていません</string>
+    <string name="now_time_is">現在の設定時刻:</string>
 
 </resources>
