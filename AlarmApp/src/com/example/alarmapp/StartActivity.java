@@ -28,7 +28,7 @@ public class StartActivity extends Activity implements OnClickListener,SharedPre
 	
 	private int cal_hour;
 	private int cal_minute;
-	private int selectAlarm;
+	private int selectMode;
 	private int selectSound;
 	
     private SharedPreferences prefs;
@@ -49,7 +49,6 @@ public class StartActivity extends Activity implements OnClickListener,SharedPre
 	}
 	
 	private void settingDisplayParts(){
-		TextView nowSet = (TextView)findViewById(R.id.text_set_time);
 		Button alarmYesButton = (Button)findViewById(R.id.buttonYes);
 		Button alarmNoButton = (Button)findViewById(R.id.buttonNo);
 
@@ -72,25 +71,32 @@ public class StartActivity extends Activity implements OnClickListener,SharedPre
 		timePicker.setCurrentMinute(cal_minute);
 		
 		// RadioButtonの設定
-		selectSound = prefs.getInt("checked_sound", -1);
-        selectAlarm = prefs.getInt("checked_mode", -1);
-        if(selectSound != -1){
-        	RadioButton rb = (RadioButton)findViewById(selectSound);
-        	rb.setChecked(true);
-        }
-        if(selectAlarm != -1){
-        	RadioButton rb = (RadioButton)findViewById(selectAlarm);
-        	rb.setChecked(true);
-        }
+		selectSound = prefs.getInt("checked_sound", R.id.radioButton_sound1);
+        selectMode = prefs.getInt("checked_mode", R.id.radioButton_mode1);
+        RadioButton rbSound = (RadioButton)findViewById(selectSound);
+        RadioButton rbMode = (RadioButton)findViewById(selectMode);
+        rbSound.setChecked(true);
+        rbMode.setChecked(true);
         
+        TextView set_alarm = (TextView)findViewById(R.id.text_set_alarm);
+		TextView set_time = (TextView)findViewById(R.id.text_set_time);
+		TextView set_sound = (TextView)findViewById(R.id.text_set_sound);
+		TextView set_mode = (TextView)findViewById(R.id.text_set_mode);
+		
 		if(prefs.getBoolean("alarm_on", false)){
 			// 設定時刻あり
-			nowSet.setText(getMessageTime());
+			set_alarm.setText("登録されているアラーム");
+			set_time.setText(getMessageTime());
+			set_sound.setText(rbSound.getText());
+			set_mode.setText(rbMode.getText());
 			alarmYesButton.setText("上書き");
 			alarmNoButton.setEnabled(true);
 		}else{
 			// 設定時刻なし
-			nowSet.setText("登録されていません");
+			set_alarm.setText("現在登録されているアラームはありません");
+			set_time.setText("");
+			set_sound.setText("");
+			set_mode.setText("");
 			alarmYesButton.setText("登録");
 			alarmNoButton.setEnabled(false);
 		}
@@ -155,7 +161,7 @@ public class StartActivity extends Activity implements OnClickListener,SharedPre
 	    RadioGroup radioGroupSound = (RadioGroup)findViewById(R.id.radiogroup_sound);
 	    selectSound = radioGroupSound.getCheckedRadioButtonId();
 	    RadioGroup radioGroupMode = (RadioGroup)findViewById(R.id.radiogroup_mode);
-	    selectAlarm = radioGroupMode.getCheckedRadioButtonId();
+	    selectMode = radioGroupMode.getCheckedRadioButtonId();
 	    
 	    // 記録前に前のアラームを消去
 	    removeAlarm();
@@ -169,7 +175,7 @@ public class StartActivity extends Activity implements OnClickListener,SharedPre
 	    editor.putInt( "cal_hour", cal_hour );
 	    editor.putInt( "cal_minute", cal_minute );
 	    editor.putInt( "checked_sound", selectSound);
-	    editor.putInt( "checked_mode", selectAlarm);
+	    editor.putInt( "checked_mode", selectMode);
 	    editor.putBoolean("alarm_on", true);
 	    editor.commit();
 	}
@@ -186,10 +192,10 @@ public class StartActivity extends Activity implements OnClickListener,SharedPre
         // 起動するアプリケーションを登録 
         // 現在選ばれているモード
 	    RadioGroup radioGroupMode = (RadioGroup)findViewById(R.id.radiogroup_mode);
-	    selectAlarm = radioGroupMode.getCheckedRadioButtonId();
+	    selectMode = radioGroupMode.getCheckedRadioButtonId();
 	    
 	    Intent intent = null;
-    	switch(selectAlarm){
+    	switch(selectMode){
     	case R.id.radioButton_mode1:
     		intent = new Intent( getApplicationContext(), AlarmActivity.class );
     		break;
@@ -207,9 +213,9 @@ public class StartActivity extends Activity implements OnClickListener,SharedPre
     private PendingIntent getPreviousPendingIntent() {
         // 起動するアプリケーションを登録 
         // 設定したモード
-    	selectAlarm = prefs.getInt("checked_mode", -1);
+    	selectMode = prefs.getInt("checked_mode", -1);
 	    Intent intent = null;
-    	switch(selectAlarm){
+    	switch(selectMode){
     	case R.id.radioButton_mode1:
     		intent = new Intent( getApplicationContext(), AlarmActivity.class );
     		break;
