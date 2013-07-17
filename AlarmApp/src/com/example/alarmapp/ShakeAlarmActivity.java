@@ -1,21 +1,16 @@
 package com.example.alarmapp;
 
-import android.app.Activity;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
-import android.media.AudioManager;
-import android.media.SoundPool;
-import android.media.SoundPool.OnLoadCompleteListener;
 import android.os.Bundle;
 import android.view.Menu;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class ShakeAlarmActivity extends Activity implements SensorEventListener{
-	private SoundPool soundPool;
-	private int bell;
+public class ShakeAlarmActivity extends AlarmActivity implements SensorEventListener{
+
 	private SensorManager mSensorManager;
 	private Sensor mSensor;
 	private int mShakeCounter = 10;
@@ -24,20 +19,6 @@ public class ShakeAlarmActivity extends Activity implements SensorEventListener{
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_shake_alarm);
-
-		// sound読み込み
-		soundPool = new SoundPool(1, AudioManager.STREAM_ALARM, 0);
-		bell = soundPool.load(this, R.raw.bell, 1);
-		// soundが読み込まれた時の処理
-		soundPool.setOnLoadCompleteListener(new OnLoadCompleteListener() {
-			@Override
-			public void onLoadComplete(SoundPool soundPool, int sampleId, int status) {
-				if (0 == status) {
-						Toast.makeText(getApplicationContext(), "LoadComplete", Toast.LENGTH_LONG).show();
-						soundPool.play(bell, 1.0F, 1.0F, 0, -1, 1.0F);
-				}
-			}
-		});
 		
 		mSensorManager = (SensorManager)getSystemService(SENSOR_SERVICE);
 		
@@ -51,7 +32,6 @@ public class ShakeAlarmActivity extends Activity implements SensorEventListener{
 
 	@Override
 	protected void onResume() {
-		// TODO Auto-generated method stub
 		super.onResume();
 		
 		// センサーの取得
@@ -64,7 +44,6 @@ public class ShakeAlarmActivity extends Activity implements SensorEventListener{
 
 	@Override
 	protected void onPause() {
-		// TODO Auto-generated method stub
 		super.onPause();
 		
 		// センサーへのイベントリスナーの解除
@@ -105,7 +84,6 @@ public class ShakeAlarmActivity extends Activity implements SensorEventListener{
     			numText.setText(String.valueOf(mShakeCounter));
     		}
     		if(mShakeCounter <= 0){
-    			soundPool.release();
     			finish();
     		}
         }
@@ -149,7 +127,7 @@ public class ShakeAlarmActivity extends Activity implements SensorEventListener{
         		Math.pow(highValues[2],2));
         
         // しきい値（適当）を超えるとShakeを感知
-        if(shakeValue > 15.0f){
+        if(shakeValue > 18.0f){
         	return true;
         }else{
         	return false;
