@@ -46,6 +46,11 @@
             android:name="com.example.alarmapp.VoiceAlarmActivity"
             android:label="@string/title_activity_voice_alarm" >
         </activity>
+        <activity
+            android:name="com.example.alarmapp.ButtonAlarmActivity"
+            android:label="@string/title_activity_button_alarm" >
+        </activity>
+
     </application>
 
 </manifest>
