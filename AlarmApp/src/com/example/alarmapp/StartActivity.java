@@ -134,6 +134,7 @@ public class StartActivity extends Activity implements OnClickListener,SharedPre
 		// 現在時刻を取得しカレンダーに保存
 		calendar = Calendar.getInstance();
 		calendar.setTimeInMillis(System.currentTimeMillis());
+		
 		// TimePicker で選択された時刻を取得 
 		timePicker = (TimePicker)findViewById(R.id.time_picker);
 		cal_hour = timePicker.getCurrentHour();
@@ -168,7 +169,7 @@ public class StartActivity extends Activity implements OnClickListener,SharedPre
 	    
 	    // アラームに登録 
 		alarmManager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
-	    alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis() + millis24hour, getPendingIntent());
+	    alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis() + millis24hour, getPendingIntent(selectMode,selectSound));
 	    
 	    // 時刻を保存 
 	    SharedPreferences.Editor editor = prefs.edit();
@@ -185,46 +186,29 @@ public class StartActivity extends Activity implements OnClickListener,SharedPre
         
         // 登録してあるアラームを解除 
        alarmManager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
-       alarmManager.cancel(getPreviousPendingIntent());
+       alarmManager.cancel(getPendingIntent(
+    		   prefs.getInt("checked_mode", -1),
+    		   prefs.getInt("checked_sound", -1)));
 	}
 	
-    private PendingIntent getPendingIntent() {
-        // 起動するアプリケーションを登録 
-        // 現在選ばれているモード
-	    RadioGroup radioGroupMode = (RadioGroup)findViewById(R.id.radiogroup_mode);
-	    selectMode = radioGroupMode.getCheckedRadioButtonId();
-	    
+    private PendingIntent getPendingIntent(int mode, int sound) {
+        // 起動するアプリケーション
 	    Intent intent = null;
-    	switch(selectMode){
+    	switch(mode){
     	case R.id.radioButton_mode1:
-    		intent = new Intent( getApplicationContext(), AlarmActivity.class );
+    		intent = new Intent( getApplicationContext(), NormalAlarmActivity.class );
     		break;
     	case R.id.radioButton_mode2:
     		intent = new Intent( getApplicationContext(), ShakeAlarmActivity.class );
     		break;
-    	}
-    	RadioGroup radioGroupSound = (RadioGroup)findViewById(R.id.radiogroup_sound);
-	    selectSound = radioGroupSound.getCheckedRadioButtonId();
-	    intent.putExtra("sound", selectSound);
-    	PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT );
-       return pendingIntent;
-    }
-	
-    private PendingIntent getPreviousPendingIntent() {
-        // 起動するアプリケーションを登録 
-        // 設定したモード
-    	selectMode = prefs.getInt("checked_mode", -1);
-	    Intent intent = null;
-    	switch(selectMode){
-    	case R.id.radioButton_mode1:
-    		intent = new Intent( getApplicationContext(), AlarmActivity.class );
+    	case R.id.radioButton_mode3:
+    		intent = new Intent( getApplicationContext(), LightAlarmActivity.class );
     		break;
-    	case R.id.radioButton_mode2:
-    		intent = new Intent( getApplicationContext(), ShakeAlarmActivity.class );
+    	case R.id.radioButton_mode4:
+    		intent = new Intent( getApplicationContext(), VoiceAlarmActivity.class );
     		break;
     	}
-    	selectSound = prefs.getInt("checked_sound", -1);
-    	intent.putExtra("sound", selectSound);
+    	intent.putExtra("sound", sound);
     	PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT );
        return pendingIntent;
     }

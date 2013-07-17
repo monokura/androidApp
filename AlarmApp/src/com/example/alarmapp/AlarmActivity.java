@@ -18,22 +18,19 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.Toast;
 
-public class AlarmActivity extends Activity implements OnClickListener{
+public class AlarmActivity extends Activity{
 	private SoundPool soundPool;
 	private int soundIndex;
-    private Button startButton;
+    //private Button startButton;
 
     private SharedPreferences prefs;
     
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_alarm);
+		//setContentView(R.layout.activity_alarm);
 		// Show the Up button in the action bar.
 		setupActionBar();
-
-		startButton = (Button) this.findViewById(R.id.alarm_button);
-        startButton.setOnClickListener(this);
 
         // プリファレンスの設定
         prefs = PreferenceManager.getDefaultSharedPreferences(this);
@@ -48,23 +45,23 @@ public class AlarmActivity extends Activity implements OnClickListener{
         switch(selectSound){
         case R.id.radioButton_sound1:
         	Toast.makeText(this, "Sound1", Toast.LENGTH_SHORT).show();
-        	soundIndex = soundPool.load(this, R.raw.bell, 1);
+        	soundIndex = soundPool.load(this, R.raw.sound1, 1);
     		break;
         case R.id.radioButton_sound2:
         	Toast.makeText(this, "Sound2", Toast.LENGTH_SHORT).show();
-        	soundIndex = soundPool.load(this, R.raw.bell, 1);
+        	soundIndex = soundPool.load(this, R.raw.sound2, 1);
     		break;
         case R.id.radioButton_sound3:
         	Toast.makeText(this, "Sound3", Toast.LENGTH_SHORT).show();
-        	soundIndex = soundPool.load(this, R.raw.bell, 1);
+        	soundIndex = soundPool.load(this, R.raw.sound3, 1);
         	break;
         case R.id.radioButton_sound4:
         	Toast.makeText(this, "Sound4", Toast.LENGTH_SHORT).show();
-        	soundIndex = soundPool.load(this, R.raw.bell, 1);
+        	soundIndex = soundPool.load(this, R.raw.sound4, 1);
         	break;
         default:
         	Toast.makeText(this, "default", Toast.LENGTH_SHORT).show();
-        	soundIndex = soundPool.load(this, R.raw.bell, 1);
+        	soundIndex = soundPool.load(this, R.raw.sound1, 1);
         	break;	
         }
         
@@ -74,11 +71,10 @@ public class AlarmActivity extends Activity implements OnClickListener{
             public void onLoadComplete(SoundPool soundPool, int sampleId, int status) {
                 if (0 == status) {
                     Toast.makeText(getApplicationContext(), "LoadComplete", Toast.LENGTH_LONG).show();
-                    //soundPool.play(soundIndex, 1.0F, 1.0F, 0, -1, 1.0F);
+                    //soundPool.play(soundIndex, 0.5F, 0.5F, 0, -1, 1.0F);
                 }
             }
         });
-        
 	}
 
 	@Override
@@ -94,20 +90,12 @@ public class AlarmActivity extends Activity implements OnClickListener{
 	    editor.putBoolean("alarm_on", false);
 	    editor.commit();
 	}
-	
-	@Override
-	public void onClick(View v) {
-		// TODO Auto-generated method stub
-		switch(v.getId()){
-		case R.id.alarm_button:
-			finish();
-			break;
-		}
-	}
+
 	
 	@Override
 	public void finish() {
 		// TODO Auto-generated method stub
+		Toast.makeText(this, "finish", Toast.LENGTH_SHORT).show();
 		super.finish();
 		soundPool.release();
 		setAlarmOff();

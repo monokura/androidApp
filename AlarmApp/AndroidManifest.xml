@@ -3,7 +3,7 @@
     package="com.example.alarmapp"
     android:versionCode="1"
     android:versionName="1.0" >
-    
+
     <uses-sdk
         android:minSdkVersion="11"
         android:targetSdkVersion="17" />
@@ -33,6 +33,18 @@
         <activity
             android:name="com.example.alarmapp.ShakeAlarmActivity"
             android:label="@string/title_activity_shake_alarm" >
+        </activity>
+        <activity
+            android:name="com.example.alarmapp.NormalAlarmActivity"
+            android:label="@string/title_activity_normal_alarm" >
+        </activity>
+        <activity
+            android:name="com.example.alarmapp.LightAlarmActivity"
+            android:label="@string/title_activity_light_alarm" >
+        </activity>
+        <activity
+            android:name="com.example.alarmapp.VoiceAlarmActivity"
+            android:label="@string/title_activity_voice_alarm" >
         </activity>
     </application>
 
