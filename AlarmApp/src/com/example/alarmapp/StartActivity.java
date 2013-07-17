@@ -1,6 +1,7 @@
 package com.example.alarmapp;
 
 import java.util.Calendar;
+import java.util.Map;
 
 import android.app.Activity;
 import android.app.AlarmManager;
@@ -37,7 +38,6 @@ public class StartActivity extends Activity implements OnClickListener,SharedPre
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_start);
-		
 		// É{É^Éìê›íË
 		Button alarmYesButton = (Button)findViewById(R.id.buttonYes);
 		Button alarmNoButton = (Button)findViewById(R.id.buttonNo);
@@ -51,7 +51,7 @@ public class StartActivity extends Activity implements OnClickListener,SharedPre
 	private void settingDisplayParts(){
 		Button alarmYesButton = (Button)findViewById(R.id.buttonYes);
 		Button alarmNoButton = (Button)findViewById(R.id.buttonNo);
-
+				
 		// åªç›éûä‘ÇÃéÊìæ
 		calendar = Calendar.getInstance();
 		calendar.setTimeInMillis(System.currentTimeMillis());
@@ -70,19 +70,31 @@ public class StartActivity extends Activity implements OnClickListener,SharedPre
 		timePicker.setCurrentHour(cal_hour);
 		timePicker.setCurrentMinute(cal_minute);
 		
+		//resetPreference();
 		// RadioButtonÇÃê›íË
 		selectSound = prefs.getInt("checked_sound", R.id.radioButton_sound1);
         selectMode = prefs.getInt("checked_mode", R.id.radioButton_mode1);
+        
+        Log.d("Check","point1");
+        Log.d("Check",String.valueOf(selectSound));
+        Log.d("Check",String.valueOf(R.id.radioButton_mode1));
+        Log.d("Check","point2");
+        Log.d("Check",String.valueOf(selectMode));
+        Log.d("Check",String.valueOf(R.id.radioButton_sound1));
+        
+        
         RadioButton rbSound = (RadioButton)findViewById(selectSound);
         RadioButton rbMode = (RadioButton)findViewById(selectMode);
         rbSound.setChecked(true);
         rbMode.setChecked(true);
+
+        Log.d("Check","point3");
         
         TextView set_alarm = (TextView)findViewById(R.id.text_set_alarm);
 		TextView set_time = (TextView)findViewById(R.id.text_set_time);
 		TextView set_sound = (TextView)findViewById(R.id.text_set_sound);
 		TextView set_mode = (TextView)findViewById(R.id.text_set_mode);
-		
+
 		if(prefs.getBoolean("alarm_on", false)){
 			// ê›íËéûçèÇ†ÇË
 			set_alarm.setText("ìoò^Ç≥ÇÍÇƒÇ¢ÇÈÉAÉâÅ[ÉÄ");
@@ -99,7 +111,7 @@ public class StartActivity extends Activity implements OnClickListener,SharedPre
 			set_mode.setText("");
 			alarmYesButton.setText("ìoò^");
 			alarmNoButton.setEnabled(false);
-		}
+		}		
 	}
 	
 	private String getMessageTime(){
@@ -207,6 +219,12 @@ public class StartActivity extends Activity implements OnClickListener,SharedPre
     	case R.id.radioButton_mode4:
     		intent = new Intent( getApplicationContext(), VoiceAlarmActivity.class );
     		break;
+    	case R.id.radioButton_mode5:
+    		intent = new Intent( getApplicationContext(), ButtonAlarmActivity.class );
+    		break;
+    	default:
+    		intent = new Intent( getApplicationContext(), NormalAlarmActivity.class );
+    		break;
     	}
     	intent.putExtra("sound", sound);
     	PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT );
@@ -222,5 +240,17 @@ public class StartActivity extends Activity implements OnClickListener,SharedPre
 	@Override
 	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,String key) {
 		settingDisplayParts();
+	}
+	
+	private void resetPreference(){
+		Log.d("debug", "RESET Preference");
+		SharedPreferences.Editor editor = prefs.edit();
+		Map<String, ?> keys = prefs.getAll();
+		if (keys.size() > 0) {
+			for (String key : keys.keySet()) {
+				editor.remove(key);
+			}
+			editor.commit();
+		}
 	}
 }

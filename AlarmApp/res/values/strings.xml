@@ -16,5 +16,7 @@
     <string name="title_activity_normal_alarm">NormalAlarmActivity</string>
     <string name="title_activity_light_alarm">LightAlarmActivity</string>
     <string name="title_activity_voice_alarm">VoiceAlarmActivity</string>
+    <string name="title_activity_button_alarm">ButtonAlarmActivity</string>
+    <string name="title_activity_hoge">HogeActivity</string>
 
 </resources>

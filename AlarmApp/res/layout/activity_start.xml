@@ -79,26 +79,33 @@
             android:id="@+id/radioButton_mode1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Mode1"
+            android:text="Normal"
             android:checked="true" />
 
         <RadioButton
             android:id="@+id/radioButton_mode2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Mode2" />
+            android:text="Shake" />
 
         <RadioButton
             android:id="@+id/radioButton_mode3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Mode3" />
+            android:text="Light" />
 
         <RadioButton
             android:id="@+id/radioButton_mode4"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Mode4" />
+            android:text="Voice" />
+        
+        <RadioButton
+            android:id="@+id/radioButton_mode5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="9 Butoon" />
+
     </RadioGroup>
     
 	<Button
