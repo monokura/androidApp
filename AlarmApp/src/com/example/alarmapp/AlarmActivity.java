@@ -44,23 +44,23 @@ public class AlarmActivity extends Activity{
         
         switch(selectSound){
         case R.id.radioButton_sound1:
-        	Toast.makeText(this, "Sound1", Toast.LENGTH_SHORT).show();
+        	//Toast.makeText(this, "Sound1", Toast.LENGTH_SHORT).show();
         	soundIndex = soundPool.load(this, R.raw.sound1, 1);
     		break;
         case R.id.radioButton_sound2:
-        	Toast.makeText(this, "Sound2", Toast.LENGTH_SHORT).show();
+        	//Toast.makeText(this, "Sound2", Toast.LENGTH_SHORT).show();
         	soundIndex = soundPool.load(this, R.raw.sound2, 1);
     		break;
         case R.id.radioButton_sound3:
-        	Toast.makeText(this, "Sound3", Toast.LENGTH_SHORT).show();
+        	//Toast.makeText(this, "Sound3", Toast.LENGTH_SHORT).show();
         	soundIndex = soundPool.load(this, R.raw.sound3, 1);
         	break;
         case R.id.radioButton_sound4:
-        	Toast.makeText(this, "Sound4", Toast.LENGTH_SHORT).show();
+        	//Toast.makeText(this, "Sound4", Toast.LENGTH_SHORT).show();
         	soundIndex = soundPool.load(this, R.raw.sound4, 1);
         	break;
         default:
-        	Toast.makeText(this, "default", Toast.LENGTH_SHORT).show();
+        	//Toast.makeText(this, "default", Toast.LENGTH_SHORT).show();
         	soundIndex = soundPool.load(this, R.raw.sound1, 1);
         	break;	
         }
@@ -70,8 +70,8 @@ public class AlarmActivity extends Activity{
             @Override
             public void onLoadComplete(SoundPool soundPool, int sampleId, int status) {
                 if (0 == status) {
-                    Toast.makeText(getApplicationContext(), "LoadComplete", Toast.LENGTH_LONG).show();
-                    //soundPool.play(soundIndex, 0.5F, 0.5F, 0, -1, 1.0F);
+                    //Toast.makeText(getApplicationContext(), "LoadComplete", Toast.LENGTH_LONG).show();
+                    soundPool.play(soundIndex, 0.5F, 0.5F, 0, -1, 1.0F);
                 }
             }
         });
@@ -95,7 +95,7 @@ public class AlarmActivity extends Activity{
 	@Override
 	public void finish() {
 		// TODO Auto-generated method stub
-		Toast.makeText(this, "finish", Toast.LENGTH_SHORT).show();
+		//Toast.makeText(this, "finish", Toast.LENGTH_SHORT).show();
 		super.finish();
 		soundPool.release();
 		setAlarmOff();

@@ -77,7 +77,7 @@ public class ShakeAlarmActivity extends AlarmActivity implements SensorEventList
 		// ’l•ÏX‚Ìˆ—
         if (event.sensor.getType() == Sensor.TYPE_LINEAR_ACCELERATION) {
     		if(shakeDetector(event)){
-    			Toast.makeText(this, "shake", Toast.LENGTH_SHORT).show();
+    			//Toast.makeText(this, "shake", Toast.LENGTH_SHORT).show();
         		
     			mShakeCounter--;
     			TextView numText = (TextView)findViewById(R.id.shake_num);

@@ -161,8 +161,6 @@ public class StartActivity extends Activity implements OnClickListener,SharedPre
 	    		&& (cal_minute >= calendar.get(Calendar.MINUTE))){
 	    	// 設定の「時」が同じで、「分」が未来
 	    	millis24hour = 0;
-	    }else{
-	    	Toast.makeText(this, "3", Toast.LENGTH_SHORT).show();
 	    }
 		// 取得した時刻をカレンダーに設定 
 		calendar.set(Calendar.HOUR_OF_DAY, cal_hour);

@@ -14,7 +14,6 @@ import android.widget.Toast;
 
 public class VoiceAlarmActivity extends AlarmActivity{
 
-	// = 0 の部分は、適当な値に変更してください（とりあえず試すには問題ないですが）
     private static final int REQUEST_CODE = 0;
 	private String answer = "おはようございます";
     
@@ -36,7 +35,7 @@ public class VoiceAlarmActivity extends AlarmActivity{
                 RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
         intent.putExtra(
                 RecognizerIntent.EXTRA_PROMPT,
-                "「おはようございます」と言ってください"); // お好きな文字に変更できます
+                "「おはようございます」と言ってください"); 
         
         // インテント発行
         startActivityForResult(intent, REQUEST_CODE);
@@ -65,7 +64,6 @@ public class VoiceAlarmActivity extends AlarmActivity{
 
     			Log.d("VoiceInput", results.get(i));
     			if(answer.equals(results.get(i))){
-    				Toast.makeText(this, results.get(i), Toast.LENGTH_SHORT).show();
     				successFlag = true;
     				break;
     			}

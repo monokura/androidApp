@@ -15,7 +15,6 @@ public class NormalAlarmActivity extends AlarmActivity implements OnClickListene
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
-		Toast.makeText(this, "create", Toast.LENGTH_SHORT).show();
 		setContentView(R.layout.activity_normal_alarm);
 		
 		startButton = (Button) this.findViewById(R.id.alarm_button);
