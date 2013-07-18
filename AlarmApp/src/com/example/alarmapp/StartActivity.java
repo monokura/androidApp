@@ -66,7 +66,7 @@ public class StartActivity extends Activity implements OnClickListener,SharedPre
 		
 		// TimePicker ‚É”½‰f 
 		timePicker = (TimePicker)findViewById(R.id.time_picker);
-		timePicker.setIs24HourView(false);
+		timePicker.setIs24HourView(true);
 		timePicker.setCurrentHour(cal_hour);
 		timePicker.setCurrentMinute(cal_minute);
 		

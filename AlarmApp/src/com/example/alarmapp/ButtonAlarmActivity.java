@@ -117,6 +117,8 @@ public class ButtonAlarmActivity extends AlarmActivity implements OnClickListene
 		button7.setEnabled(true);
 		button8.setEnabled(true);
 		button9.setEnabled(true);
+		
+		counter = 1;
 	}
 	
 	@Override
