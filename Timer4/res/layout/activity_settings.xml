@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="@dimen/settings_text_bottom_margin"
+        android:layout_marginTop="@dimen/settings_text_top_margin"
+        android:text="@string/settings_text"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textSize="@dimen/settings_text_size" />
+
+    <EditText
+        android:id="@+id/minutes"
+        android:layout_width="@dimen/ok_button_width"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:ems="4"
+        android:inputType="number"
+        android:textSize="@dimen/count_view_text_size" />
+
+    <Button
+        android:id="@+id/ok_button"
+        android:layout_width="@dimen/ok_button_width"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="@dimen/ok_button_top_margin"
+        android:text="@string/ok_button_label"
+        android:textSize="@dimen/button_label_text_size" />
+
+</LinearLayout>

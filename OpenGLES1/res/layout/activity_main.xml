@@ -1,0 +1,32 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".MainActivity" >
+
+    <android.opengl.GLSurfaceView
+        android:id="@+id/glview"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+    <SeekBar
+        android:id="@+id/rotation_bar_x"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:max="360" />
+
+    <SeekBar
+        android:id="@+id/rotation_bar_y"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:max="360" />
+
+    <SeekBar
+        android:id="@+id/rotation_bar_z"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:max="360" />
+
+</LinearLayout>
